@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:login_api/app/core/handlers/auth_handler.dart';
+import 'package:login_api/app/core/services/location_service.dart/get_current_location.dart';
 import 'package:login_api/app/core/services/network_service/routes/api_routes.dart';
 import 'package:login_api/app/modules/attendance/domain/entity/clock_in_entity.dart';
 import 'package:login_api/app/modules/attendance/presentation/controller/attendance_provider.dart';
 import 'package:login_api/app/modules/attendance/presentation/widgets/attendance_button.dart';
-import 'package:login_api/app/modules/authentication/data/dto/login_dto.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -16,12 +16,79 @@ class HomeScreen extends ConsumerStatefulWidget {
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
-  void initState() {
+  void initState() async{
+  /* Future.microtask() Flutter/Dart mein ek task ko microtask queue mein schedule karta hai.
+     Yeh task current synchronous code complete hone ke foran baad execute hota hai, aur normal Future() se pehle run karta hai.*/
     Future.microtask(
       () => ref.read(attendanceProvider.notifier).checkClockInClockOutStatus(),
     );
+    final position = await LocationService.getCurrentLocation();
+    debugPrint('Latitude: ${position.latitude}');
+    debugPrint('Longitude: ${position.longitude}');
     super.initState();
   }
+
+//Example : Future vs Future.microtask
+/* 
+Code: 
+ void main() {
+  print('Start');
+
+  Future(() {
+    print('Future');
+  });
+
+  Future.microtask(() {
+    print('Microtask');
+  });
+
+  print('End');
+}
+
+ ....Output:
+Start
+End
+Microtask
+Future
+
+....Reason
+Dart Event Loop mein:(yay sequence chlta hai)
+Synchronous code
+Microtask Queue
+Event Queue (Future, Timer, I/O, etc.)
+
+Isliye Future.microtask() hamesha normal Future() se pehle execute hota hai.*/
+
+// ...Eecution order
+// 1. initState()
+// 2. checkClockInClockOutStatus() queue mein add
+// 3. build()
+// 4. Card UI render
+// 5. microtask execute
+// 6. API hit
+// 7. hasLoader(checkStatus) = true
+// 8. CircularProgressIndicator show
+// 9. API response
+// 10. Provider update
+// 11. ref.watch rebuild
+// 12. Clock In / Clock Out buttons update
+
+
+// initState()
+// ↓
+// build()
+// ↓
+// UI first time render
+// ↓
+// Future.microtask runs
+// ↓
+// checkClockInClockOutStatus()
+// ↓
+// Provider update
+// ↓
+// UI rebuild
+
+
 
   @override
   Widget build(BuildContext context) {

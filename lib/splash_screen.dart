@@ -4,6 +4,18 @@ import 'package:login_api/app/core/services/routing_service/app_routes.dart';
 import 'package:login_api/app/core/services/routing_service/named_routes.dart';
 import 'package:login_api/app/core/theme/app_colors.dart';
 
+/*  ...Eecution of Splash Screen
+1. Widget created
+2. initState() runs
+3. Timer starts (3 seconds countdown begins)
+4. initState() finishes
+5. build() runs
+6. UI displayed
+7. 3 seconds complete
+8. Callback executes */
+
+// build is called after initState, but the timer countdown began when Future.delayed was registered inside initState.
+
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
