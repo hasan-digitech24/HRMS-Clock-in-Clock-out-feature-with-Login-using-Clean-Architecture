@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:login_api/app/core/services/routing_service/app_routes.dart';
 import 'package:login_api/app/modules/authentication/presentation/screens/login_screen.dart';
 import 'package:login_api/app/modules/attendance/presentation/screens/home_screen.dart';
-import 'package:login_api/app/splash_screen.dart';
+import 'package:login_api/splash_screen.dart';
 
 // import 'package:pakistan_cables_mobile/src/core/services/routing_service/app_routes.dart';
 
