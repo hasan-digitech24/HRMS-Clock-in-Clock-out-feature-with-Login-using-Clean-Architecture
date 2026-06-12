@@ -16,20 +16,20 @@ class HomeScreen extends ConsumerStatefulWidget {
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
-  void initState() async{
-  /* Future.microtask() Flutter/Dart mein ek task ko microtask queue mein schedule karta hai.
+  void initState() {
+    /* Future.microtask() Flutter/Dart mein ek task ko microtask queue mein schedule karta hai.
      Yeh task current synchronous code complete hone ke foran baad execute hota hai, aur normal Future() se pehle run karta hai.*/
     Future.microtask(
       () => ref.read(attendanceProvider.notifier).checkClockInClockOutStatus(),
     );
-    final position = await LocationService.getCurrentLocation();
-    debugPrint('Latitude: ${position.latitude}');
-    debugPrint('Longitude: ${position.longitude}');
+  
     super.initState();
   }
 
-//Example : Future vs Future.microtask
-/* 
+
+
+  //Example : Future vs Future.microtask
+  /* 
 Code: 
  void main() {
   print('Start');
@@ -59,36 +59,33 @@ Event Queue (Future, Timer, I/O, etc.)
 
 Isliye Future.microtask() hamesha normal Future() se pehle execute hota hai.*/
 
-// ...Eecution order
-// 1. initState()
-// 2. checkClockInClockOutStatus() queue mein add
-// 3. build()
-// 4. Card UI render
-// 5. microtask execute
-// 6. API hit
-// 7. hasLoader(checkStatus) = true
-// 8. CircularProgressIndicator show
-// 9. API response
-// 10. Provider update
-// 11. ref.watch rebuild
-// 12. Clock In / Clock Out buttons update
+  // ...Eecution order
+  // 1. initState()
+  // 2. checkClockInClockOutStatus() queue mein add
+  // 3. build()
+  // 4. Card UI render
+  // 5. microtask execute
+  // 6. API hit
+  // 7. hasLoader(checkStatus) = true
+  // 8. CircularProgressIndicator show
+  // 9. API response
+  // 10. Provider update
+  // 11. ref.watch rebuild
+  // 12. Clock In / Clock Out buttons update
 
-
-// initState()
-// ↓
-// build()
-// ↓
-// UI first time render
-// ↓
-// Future.microtask runs
-// ↓
-// checkClockInClockOutStatus()
-// ↓
-// Provider update
-// ↓
-// UI rebuild
-
-
+  // initState()
+  // ↓
+  // build()
+  // ↓
+  // UI first time render
+  // ↓
+  // Future.microtask runs
+  // ↓
+  // checkClockInClockOutStatus()
+  // ↓
+  // Provider update
+  // ↓
+  // UI rebuild
 
   @override
   Widget build(BuildContext context) {
@@ -191,24 +188,32 @@ Isliye Future.microtask() hamesha normal Future() se pehle execute hota hai.*/
                               child: AttendanceButton(
                                 labelText: 'Clock In',
                                 backgroundColor: const Color(0xff25B885),
-                                buttonenable: attendanceProv.hasLoader(ApiRoutes.checkStatus(1)) ? false : true,
-                                isClockedIn: attendanceProv
-                                    .checkStatusDto
-                                    ?.clockInStatus == true ? false : true,
+                                buttonenable:
+                                    attendanceProv.hasLoader(
+                                      ApiRoutes.checkStatus(1),
+                                    )
+                                    ? false
+                                    : true,
+                                isClockedIn:
+                                    attendanceProv
+                                            .checkStatusDto
+                                            ?.clockInStatus ==
+                                        true
+                                    ? false
+                                    : true,
                                 isloading: attendanceProv.hasLoader(
                                   ApiRoutes.clockIn(1),
                                 ),
                                 onPress: () {
                                   attendanceProv.clockIn(
                                     ClockInEntity(
-                                      latitude: 23.456223333,
-                                      longitude: 74.9102222222,
+                                      latitude: attendanceProv.position?.latitude ?? 0.0 ,
+                                      longitude: attendanceProv.position?.longitude ?? 0.0,
                                       type: 'set_clocking',
-                                     
                                     ),
                                     AuthHandler.ref.user?.userId ?? 0,
                                   );
-                                }, 
+                                },
                               ),
                             ),
 
@@ -218,25 +223,32 @@ Isliye Future.microtask() hamesha normal Future() se pehle execute hota hai.*/
                               child: AttendanceButton(
                                 labelText: 'Clock Out',
                                 backgroundColor: const Color(0xffE53935),
-                                buttonenable: attendanceProv.hasLoader(ApiRoutes.checkStatus(1)) ? false : true,
-                                isClockedIn: attendanceProv
-                                    .checkStatusDto
-                                    ?.clockInStatus == false ? false : true,
+                                buttonenable:
+                                    attendanceProv.hasLoader(
+                                      ApiRoutes.checkStatus(1),
+                                    )
+                                    ? false
+                                    : true,
+                                isClockedIn:
+                                    attendanceProv
+                                            .checkStatusDto
+                                            ?.clockInStatus ==
+                                        false
+                                    ? false
+                                    : true,
                                 isloading: attendanceProv.hasLoader(
                                   ApiRoutes.clockIn(2),
                                 ),
                                 onPress: () {
                                   attendanceProv.clockOut(
                                     ClockInEntity(
-                                      latitude: 23.456223333,
-                                      longitude: 74.9102222222,
+                                       latitude: attendanceProv.position?.latitude ?? 0.0 ,
+                                      longitude: attendanceProv.position?.longitude ?? 0.0,
                                       type: 'set_clocking',
-                                      timeAttendanceId:
-                                          attendanceProv
-                                              .checkStatusDto
-                                              ?.attendanceData
-                                              ?.timeAttendanceId
-                                          ,
+                                      timeAttendanceId: attendanceProv
+                                          .checkStatusDto
+                                          ?.attendanceData
+                                          ?.timeAttendanceId,
                                     ),
                                     AuthHandler.ref.user?.userId ?? 0,
                                   );

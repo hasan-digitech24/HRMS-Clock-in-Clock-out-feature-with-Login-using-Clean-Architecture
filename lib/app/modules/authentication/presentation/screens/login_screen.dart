@@ -77,7 +77,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   decoration: InputDecoration(
                     labelText: "Username",
                     // hintText: '+923001234567',
-                    prefixIcon: const Icon(Icons.phone),
+                    prefixIcon: const Icon(Icons.person_4_outlined),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),

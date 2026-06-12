@@ -20,7 +20,7 @@ class Prompt {
     Function()? onTap,
   }) {
     final context = AppRouterGo.context;
-    if (context != null) {
+
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -42,7 +42,7 @@ class Prompt {
           ],
         ),
       );
-    }
+  
   }
 
   static void show(String message, {Color? backgroundColor}) {

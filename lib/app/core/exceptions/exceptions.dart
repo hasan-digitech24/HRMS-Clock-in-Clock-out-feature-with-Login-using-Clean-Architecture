@@ -81,3 +81,32 @@ class NoInternetException implements Exception {
     return 'No Internet Access or connection Broken';
   }
 }
+
+// app level location permission
+class LocationPermissionException implements Exception {
+  final String message;
+
+  LocationPermissionException(this.message);
+
+  @override
+  String toString() => message;
+}
+ 
+// mobile location service permission 
+class LocationServiceException implements Exception {
+  final String message;
+
+  LocationServiceException(this.message);
+
+  @override
+  String toString() => message;
+}
+
+class OfficeRangeException implements Exception {
+  final String message;
+
+  OfficeRangeException(this.message);
+
+  @override
+  String toString() => message;
+}

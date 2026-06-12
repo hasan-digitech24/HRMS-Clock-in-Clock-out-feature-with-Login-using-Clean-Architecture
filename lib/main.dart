@@ -31,9 +31,9 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           title: 'Clean Architecture Example App',
           routerConfig: AppRouterGo.appRouter,
-          darkTheme: AppTheme.lightTheme,
+          // darkTheme: AppTheme.lightTheme,
 
-          theme: AppTheme.lightTheme,
+          // theme: AppTheme.lightTheme,
         );
       },
     );

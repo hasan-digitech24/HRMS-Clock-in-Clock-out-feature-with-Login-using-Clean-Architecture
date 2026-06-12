@@ -46,14 +46,14 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.primary,
+      backgroundColor: AppColors.lightGreen,
       body: Center(
         child: Text(
           'Welcome to the App',
           style: const TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,
-            // color: AppColors.primary,
+            color: AppColors.white,
           ),
         ),
       ),
